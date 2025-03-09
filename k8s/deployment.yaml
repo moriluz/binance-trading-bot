@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-bot
+  labels:
+    app: trading-bot
+spec:
+  replicas: 1  # Only run one instance to avoid duplicate trades
+  selector:
+    matchLabels:
+      app: trading-bot
+  template:
+    metadata:
+      labels:
+        app: trading-bot
+    spec:
+      containers:
+      - name: trading-bot
+        image: moriluz88/trading-bot:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 384Mi
+        envFrom:
+        - secretRef:
+            name: trading-bot-secrets
+        - configMapRef:
+            name: trading-bot-config
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      imagePullSecrets:
+      - name: docker-registry-secret
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: trading-bot-data

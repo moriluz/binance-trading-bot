@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trading-bot-config
+data:
+  # Trading Configuration
+  TRADING_PAIRS: "BTC/USDT,ETH/USDT,XRP/USDT,ADA/USDT,SOL/USDT"
+  INVESTMENT_AMOUNT: "100"
+  RISK_PERCENTAGE: "50"
+  MAX_POSITION_SIZE: "10"
+  STOP_LOSS_PERCENTAGE: "5"
+  TAKE_PROFIT_PERCENTAGE: "10"
+  
+  # Technical Indicators
+  SHORT_MA_PERIOD: "20"
+  LONG_MA_PERIOD: "50"
+  RSI_PERIOD: "14"
+  RSI_BUY_THRESHOLD: "50"
+  RSI_SELL_THRESHOLD: "70"
+  
+  # API Configuration
+  API_HOST: "0.0.0.0"
+  API_PORT: "8000"
+  
+  # Timeframe for data collection
+  TIMEFRAME: "15m"
